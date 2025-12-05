@@ -9,7 +9,7 @@ interface AnimatedCounterProps {
 export function AnimatedCounterText({ text }: AnimatedCounterProps) {
   // Extract number and percentage from text like "Reduce shopper skepticism by 47%"
   const match = text.match(/(\d+)(%)/);
-  const targetNumber = match ? parseInt(match[1], 10) : 0;
+  const targetNumber = match && match[1] ? parseInt(match[1], 10) : 0;
   const hasPercentage = !!match;
 
   const [count, setCount] = useState(0);
