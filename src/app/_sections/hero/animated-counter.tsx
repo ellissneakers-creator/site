@@ -21,7 +21,7 @@ export function AnimatedCounterText({ text }: AnimatedCounterProps) {
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && !hasAnimated) {
+        if (entries[0]?.isIntersecting && !hasAnimated) {
           setHasAnimated(true);
           animateCount();
         }
