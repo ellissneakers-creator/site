@@ -17,62 +17,14 @@ import type { HeaderFragment, HeaderLiksFragment } from ".";
 import { useToggleState } from "@/hooks/use-toggle-state";
 import { useHasRendered } from "@/hooks/use-has-rendered";
 
-// Helper function to transform navigation links
-function transformNavigationLinks(links: HeaderLiksFragment[]): HeaderLiksFragment[] {
-  const transformed = links.map((link) => {
-    if (link._title.toLowerCase() === "blog") {
-      return {
-        ...link,
-        _title: "Resources",
-        href: null, // Remove href so chevron shows like Features
-        sublinks: {
-          ...link.sublinks,
-          items: [
-            {
-              _id: `${link._id}-blog`,
-              _title: "Blog",
-              link: {
-                __typename: "PageReferenceComponent" as const,
-                page: {
-                  pathname: link.href || "/blog",
-                  _title: "Blog",
-                },
-              },
-            },
-            {
-              _id: `${link._id}-page-examples`,
-              _title: "Page Examples",
-              link: {
-                __typename: "CustomTextComponent" as const,
-                text: "/page-examples",
-              },
-            },
-            {
-              _id: `${link._id}-customer-experience`,
-              _title: "Customer Experience",
-              link: {
-                __typename: "CustomTextComponent" as const,
-                text: "/customer-experience",
-              },
-            },
-          ],
-        },
-      };
-    }
-    return link;
-  });
+// Items to hide from navigation
+const HIDDEN_NAV_ITEMS = ["pricing", "changelog", "blog"];
 
-  // Add "About" navigation item
-  const aboutItem: HeaderLiksFragment = {
-    _id: "about-nav-item",
-    _title: "About",
-    href: "/about",
-    sublinks: {
-      items: [],
-    },
-  };
-
-  return [...transformed, aboutItem];
+// Filter out hidden navigation items
+function filterNavigationLinks(links: HeaderLiksFragment[]): HeaderLiksFragment[] {
+  return links.filter(
+    (link) => !HIDDEN_NAV_ITEMS.some(item => link._title.toLowerCase().includes(item))
+  );
 }
 
 // #region desktop 💻
@@ -87,15 +39,7 @@ export function NavigationMenuHeader({
   links: HeaderLiksFragment[];
   className?: string;
 }) {
-  // Transform links: change "Blog" to "Resources" and add sublinks
-  const transformedLinks = transformNavigationLinks(links);
-
-  // Filter out pricing and changelog
-  const filteredLinks = transformedLinks.filter(
-    (link) => 
-      !link._title.toLowerCase().includes("pricing") && 
-      !link._title.toLowerCase().includes("changelog")
-  );
+  const filteredLinks = filterNavigationLinks(links);
 
   return (
     <NavigationMenu
@@ -112,6 +56,12 @@ export function NavigationMenuHeader({
             </li>
           ),
         )}
+        {/* Resources dropdown */}
+        <ResourcesDropdown />
+        {/* About link */}
+        <li>
+          <NavigationMenuLink href="/about">About</NavigationMenuLink>
+        </li>
       </NavigationMenuList>
     </NavigationMenu>
   );
@@ -214,6 +164,71 @@ function NavigationMenuLinkWithMenu({ _title, href, sublinks }: HeaderLiksFragme
   );
 }
 
+// Resources dropdown with custom items
+const RESOURCES_ITEMS = [
+  { id: "resources-blog", title: "Blog", href: "/blog" },
+  { id: "resources-page-examples", title: "Page Examples", href: "/page-examples" },
+  { id: "resources-customer-experience", title: "Customer Experience", href: "/customer-experience" },
+];
+
+function ResourcesDropdown() {
+  const [closeOnClick, setCloseOnClick] = React.useState(false);
+  const timeoutRef = React.useRef<number | null>(null);
+
+  const handleMouseEnter = () => {
+    timeoutRef.current = window.setTimeout(() => {
+      setCloseOnClick(true);
+    }, 500);
+  };
+
+  const handleMouseLeave = () => {
+    clearTimeout(timeoutRef.current!);
+    setCloseOnClick(false);
+  };
+
+  return (
+    <NavigationMenuItem className="relative items-center gap-0.5">
+      <NavigationMenuTrigger
+        asChild
+        onClick={(e) => {
+          if (!closeOnClick) {
+            e.preventDefault();
+          }
+        }}
+        onPointerEnter={handleMouseEnter}
+        onPointerLeave={handleMouseLeave}
+      >
+        <Button
+          unstyled
+          className="hover:bg-surface-tertiary dark:hover:bg-dark-surface-tertiary inline-flex items-center gap-1 rounded-full pr-2 pb-px pl-3 tracking-tight lg:h-7"
+          icon={<ChevronDownIcon className="text-text-tertiary dark:text-dark-text-tertiary" />}
+        >
+          Resources
+        </Button>
+      </NavigationMenuTrigger>
+      <NavigationMenuContent className="border-border bg-surface-primary dark:border-dark-border dark:bg-dark-surface-primary absolute top-[calc(100%+4px)] w-[clamp(180px,30vw,300px)] rounded-md border p-0.5">
+        <div className="flex flex-col gap-1">
+          <ul className="flex flex-col">
+            {RESOURCES_ITEMS.map((item) => (
+              <li key={item.id}>
+                <NavigationMenuLinkPrimitive asChild>
+                  <ButtonLink
+                    unstyled
+                    className="hover:bg-surface-tertiary dark:hover:bg-dark-surface-tertiary flex w-full items-center gap-2 rounded-md px-3 py-1.5"
+                    href={item.href}
+                  >
+                    {item.title}
+                  </ButtonLink>
+                </NavigationMenuLinkPrimitive>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </NavigationMenuContent>
+    </NavigationMenuItem>
+  );
+}
+
 export function DesktopMenu({ navbar, rightCtas }: HeaderFragment) {
   return (
     <>
@@ -264,13 +279,7 @@ export function MobileMenu({ navbar, rightCtas }: HeaderFragment) {
           <div className="bg-surface-primary dark:bg-dark-surface-primary fixed top-[calc(var(--header-height)+1px)] left-0 z-10 h-auto w-full">
             <div className="flex flex-col gap-8 px-6 py-8">
               <nav className="flex flex-col gap-4">
-                {transformNavigationLinks(navbar.items)
-                  .filter(
-                    (link) => 
-                      !link._title.toLowerCase().includes("pricing") && 
-                      !link._title.toLowerCase().includes("changelog")
-                  )
-                  .map((link) =>
+                {filterNavigationLinks(navbar.items).map((link) =>
                   link.sublinks.items.length > 0 ? (
                     <ItemWithSublinks
                       key={link._id}
@@ -290,6 +299,16 @@ export function MobileMenu({ navbar, rightCtas }: HeaderFragment) {
                     </Link>
                   ),
                 )}
+                {/* Resources dropdown */}
+                <MobileResourcesDropdown onClick={handleOff} />
+                {/* About link */}
+                <Link
+                  className="flex items-center gap-2 rounded-sm px-3 py-1.5"
+                  href="/about"
+                  onClick={handleOff}
+                >
+                  About
+                </Link>
               </nav>
               <div className="flex items-center justify-start gap-2">
                 {rightCtas.items
@@ -402,6 +421,70 @@ function ItemWithSublinks({
             </li>
           );
         })}
+      </ul>
+    </div>
+  );
+}
+
+function MobileResourcesDropdown({ onClick }: { onClick: () => void }) {
+  const { isOn, handleOff, handleOn } = useToggleState(false);
+  const hasRendered = useHasRendered();
+  const listRef = React.useRef<HTMLUListElement>(null);
+
+  React.useEffect(() => {
+    if (!hasRendered) return;
+
+    if (isOn) {
+      listRef.current?.animate([{ height: `${(40 * RESOURCES_ITEMS.length).toString()}px` }], {
+        duration: 200,
+        easing: "ease-in-out",
+        fill: "forwards",
+      });
+    } else {
+      listRef.current?.animate([{ height: "0px" }], {
+        duration: 200,
+        easing: "ease-in-out",
+        fill: "forwards",
+      });
+    }
+  }, [isOn, hasRendered]);
+
+  const handleToggle = () => {
+    if (isOn) {
+      handleOff();
+    } else {
+      handleOn();
+    }
+  };
+
+  return (
+    <div>
+      <button className="flex items-center gap-2 px-3 py-1.5" onClick={handleToggle}>
+        Resources
+        <ChevronDownIcon
+          className={clsx(
+            "text-text-tertiary dark:text-dark-text-tertiary h-min transform transition-transform",
+            isOn ? "rotate-180" : "rotate-0",
+          )}
+        />
+      </button>
+      <ul
+        ref={listRef}
+        className={clsx(
+          "flex h-0 origin-top transform-gpu flex-col gap-2 overflow-hidden pl-4 transition-transform",
+        )}
+      >
+        {RESOURCES_ITEMS.map((item) => (
+          <li key={item.id}>
+            <Link
+              className="text-text-tertiary dark:text-dark-text-tertiary flex items-center gap-2 rounded-md px-3 py-1.5"
+              href={item.href}
+              onClick={onClick}
+            >
+              {item.title}
+            </Link>
+          </li>
+        ))}
       </ul>
     </div>
   );
