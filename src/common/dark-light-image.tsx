@@ -9,6 +9,10 @@ type DarkLightImageProps = DarkLightImageFragment &
     withPlaceholder?: boolean;
   };
 
+function isSvg(url: string) {
+  return url.toLowerCase().endsWith('.svg');
+}
+
 export function DarkLightImage({
   alt,
   dark,
@@ -19,38 +23,59 @@ export function DarkLightImage({
   withPlaceholder,
   ...props
 }: DarkLightImageProps) {
+  const lightIsSvg = isSvg(light.url);
+  const darkIsSvg = dark ? isSvg(dark.url) : false;
+
   return (
     <>
       {dark ? (
+        darkIsSvg ? (
+          // Use regular img for SVG to keep it crisp - let CSS control size
+          <img
+            alt={dark.alt ?? alt ?? ""}
+            className={clsx("hidden dark:block", className)}
+            src={dark.url}
+          />
+        ) : (
+          <BaseHubImage
+            alt={dark.alt ?? alt ?? ""}
+            className={clsx("hidden dark:block", className)}
+            height={height ?? dark.height}
+            src={dark.url}
+            width={width ?? dark.width}
+            {...props}
+            {...(withPlaceholder && dark.blurDataURL
+              ? {
+                  placeholder: "blur",
+                  blurDataURL: dark.blurDataURL,
+                }
+              : {})}
+          />
+        )
+      ) : null}
+      {lightIsSvg ? (
+        // Use regular img for SVG to keep it crisp - let CSS control size
+        <img
+          alt={light.alt ?? alt ?? ""}
+          className={clsx(dark && "dark:hidden", className)}
+          src={light.url}
+        />
+      ) : (
         <BaseHubImage
-          alt={dark.alt ?? alt ?? ""}
-          className={clsx("hidden dark:block", className)}
-          height={height ?? dark.height}
-          src={dark.url}
-          width={width ?? dark.width}
+          alt={light.alt ?? alt ?? ""}
+          className={clsx(dark && "dark:hidden", className)}
+          height={height ?? light.height}
+          src={light.url}
+          width={width ?? light.width}
           {...props}
-          {...(withPlaceholder && dark.blurDataURL
+          {...(withPlaceholder && light.blurDataURL
             ? {
                 placeholder: "blur",
-                blurDataURL: dark.blurDataURL,
+                blurDataURL: light.blurDataURL,
               }
             : {})}
         />
-      ) : null}
-      <BaseHubImage
-        alt={light.alt ?? alt ?? ""}
-        className={clsx(dark && "dark:hidden", className)}
-        height={height ?? light.height}
-        src={light.url}
-        width={width ?? light.width}
-        {...props}
-        {...(withPlaceholder && light.blurDataURL
-          ? {
-              placeholder: "blur",
-              blurDataURL: light.blurDataURL,
-            }
-          : {})}
-      />
+      )}
     </>
   );
 }
@@ -79,12 +104,8 @@ export function DarkLightImageAutoscale(props: DarkLightImageProps) {
     <DarkLightImage
       priority
       alt="logo"
-      className={clsx("w-auto max-w-[300px] object-contain", {
-        "h-16": logoStyle === "square",
-        "h-14": logoStyle === "4/3",
-        "h-12": logoStyle === "portrait",
-        "h-10": logoStyle === "landscape",
-      })}
+      quality={100}
+      className="w-auto h-4 max-w-[70px] object-contain"
       style={{
         aspectRatio: props.light.aspectRatio,
       }}
