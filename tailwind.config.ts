@@ -10,6 +10,7 @@ const config: Config = {
     fontFamily: {
       sans: "var(--font-sans)",
       mono: "var(--font-mono)",
+      heading: "var(--font-heading)",
     },
     colors: {
       // Dynamic colors

@@ -2,12 +2,14 @@ import type { Metadata, Viewport } from "next";
 
 import "./globals.css";
 import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import { basehub } from "basehub";
 
 import { Providers } from "./providers";
 import { Header } from "./_components/header";
 import { Footer } from "./_components/footer";
 import { Newsletter } from "./_sections/newsletter";
+import { AnnouncementBar } from "./_components/announcement-bar";
 import { draftMode } from "next/headers";
 
 const geist = Geist({
@@ -35,6 +37,14 @@ const geistMono = Geist_Mono({
   display: "swap",
   variable: "--font-mono",
   fallback: ["monaco", "monospace"],
+});
+
+// Heading font
+const headingFont = localFont({
+  src: "../fonts/FSP DEMO - Span Thin Cond.woff2",
+  variable: "--font-heading",
+  display: "swap",
+  fallback: ["var(--font-sans)", "sans-serif"],
 });
 
 export const generateMetadata = async (): Promise<Metadata> => {
@@ -108,9 +118,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html suppressHydrationWarning lang="en">
       <body
-        className={`min-h-svh max-w-[100vw] bg-surface-primary text-text-primary dark:bg-dark-surface-primary dark:text-dark-text-primary ${geistMono.variable} ${geist.variable} font-sans`}
+        className={`min-h-svh max-w-[100vw] bg-surface-primary text-text-primary dark:bg-dark-surface-primary dark:text-dark-text-primary ${geistMono.variable} ${geist.variable} ${headingFont.variable} font-sans`}
       >
         <Providers>
+          <AnnouncementBar />
           <Header />
           <main className="min-h-[calc(100svh-var(--header-height))]">{children}</main>
           <Newsletter />

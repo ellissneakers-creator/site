@@ -1,6 +1,20 @@
-.scrollbar {
-  /* width */
-  &::-webkit-scrollbar {
-    display: none;
+.marqueeTrack {
+  animation: marquee 30s linear infinite;
+  
+  &:hover {
+    animation-play-state: paused;
+  }
+}
+
+.marqueeContent {
+  /* Needed for animation calculation */
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
   }
 }

@@ -18,7 +18,7 @@ export type Faq = fragmentOn.infer<typeof faqFragment>;
 
 export function Faq(faq: Faq) {
   return (
-    <Section>
+    <Section id="faq">
       <Heading {...faq.heading}>
         <h4>{faq.heading.title}</h4>
       </Heading>

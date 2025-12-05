@@ -8,7 +8,7 @@ import { GeneralEvents } from "@/../basehub-types";
 
 export function AccordionFaq(faq: Faq & { eventsKey: GeneralEvents["ingestKey"] }) {
   return (
-    <Section>
+    <Section id="faq">
       <Heading {...faq.heading}>
         <h4>{faq.heading.title}</h4>
       </Heading>

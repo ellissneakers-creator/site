@@ -10,9 +10,9 @@ import clsx from "clsx";
 export const richTextClasses = clsx(
   "prose prose-zinc max-w-prose text-start dark:prose-invert font-normal text-md w-full leading-relaxed",
   "prose-p:text-text-secondary dark:prose-p:text-dark-text-secondary",
-  "prose-h1:text-4xl prose-h1:font-medium prose-h1:text-text-primary dark:prose-h1:text-dark-text-primary",
-  "prose-h2:text-3xl prose-h2:font-medium prose-h2:text-text-primary dark:prose-h2:text-dark-text-primary",
-  "prose-h3:text-2xl prose-h3:font-medium prose-h3:text-text-primary dark:prose-h3:text-dark-text-primary",
+  "prose-h1:font-heading prose-h1:text-4xl prose-h1:font-semibold prose-h1:text-text-primary dark:prose-h1:text-dark-text-primary",
+  "prose-h2:font-heading prose-h2:text-3xl prose-h2:font-semibold prose-h2:text-text-primary dark:prose-h2:text-dark-text-primary",
+  "prose-h3:font-heading prose-h3:text-2xl prose-h3:font-semibold prose-h3:text-text-primary dark:prose-h3:text-dark-text-primary",
   "prose-blockquote:border-border prose-blockquote:pl-5 prose-blockquote:text-2xl prose-blockquote:text-text-primary dark:prose-blockquote:border-dark-border dark:prose-blockquote:text-dark-text-primary",
   '[&_blockquote>p]:before:[content:""] [&_blockquote>p]:prose-blockquote:after:[content:""]',
   "prose-h4:text-2xl prose-h4:font-medium",

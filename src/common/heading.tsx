@@ -42,7 +42,7 @@ export function Heading({ tag, subtitle, className, align = "center", ...props }
         })}
       >
         <Comp
-          className={clsx("text-pretty text-3xl font-medium md:text-4xl", {
+          className={clsx("font-heading text-pretty text-3xl font-semibold md:text-4xl", {
             "text-center": align === "center",
             "text-left": align === "left",
             "text-right": align === "right",

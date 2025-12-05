@@ -50,15 +50,15 @@ export interface Scalars {
 }))[],
     BSHBRichTextContentSchema: RichTextNode[],
     BSHBRichTextTOCSchema: RichTextTocNode[],
-    BSHBSelect_111227338: 'Efficiency' | 'Guide' | 'Productivity' | 'Success',
-    BSHBSelect_1795611679: 'info' | 'warning',
-    BSHBSelect_1868728927: 'right' | 'center' | 'left' | 'none',
-    BSHBSelect_1879002554: 'full image' | 'gradient' | 'Image bottom' | 'Image Right',
-    BSHBSelect_1961083722: 'amber' | 'blue' | 'cyan' | 'emerald' | 'fuchsia' | 'gray' | 'green' | 'indigo' | 'lime' | 'neutral' | 'orange' | 'pink' | 'purple' | 'red' | 'rose' | 'sky' | 'slate' | 'stone' | 'teal' | 'violet' | 'yellow' | 'zinc',
-    BSHBSelect__1142171011: 'large',
-    BSHBSelect__1219632885: 'primary' | 'secondary' | 'tertiary',
-    BSHBSelect__2134102963: 'accordion' | 'list',
-    BSHBSelect__605999048: 'gray' | 'neutral' | 'slate' | 'stone' | 'zinc',
+    BSHBSelect_1837708130: 'Efficiency' | 'Guide' | 'Productivity' | 'Success',
+    BSHBSelect_1867466044: 'primary' | 'secondary' | 'tertiary',
+    BSHBSelect_1885808492: 'full image' | 'gradient' | 'Image bottom' | 'Image Right',
+    BSHBSelect_1960434833: 'large',
+    BSHBSelect_262811106: 'amber' | 'blue' | 'cyan' | 'emerald' | 'fuchsia' | 'gray' | 'green' | 'indigo' | 'lime' | 'neutral' | 'orange' | 'pink' | 'purple' | 'red' | 'rose' | 'sky' | 'slate' | 'stone' | 'teal' | 'violet' | 'yellow' | 'zinc' | 'rrr' | 'green-900' | 'emerald-100' | 'teal-800' | '14532d',
+    BSHBSelect_604783081: 'accordion' | 'list',
+    BSHBSelect__108045351: 'info' | 'warning',
+    BSHBSelect__1086199789: 'right' | 'center' | 'left' | 'none',
+    BSHBSelect__1721217313: 'gray' | 'neutral' | 'slate' | 'stone' | 'zinc',
     Boolean: boolean,
     CodeSnippetLanguage: B_Language,
     DateTime: any,
@@ -67,12 +67,12 @@ export interface Scalars {
     Int: number,
     JSON: any,
     String: string,
-    bshb_event_1238049471: `bshb_event_1238049471:${string}`,
-    schema_bshb_event_1238049471: never,
-    bshb_event__1457496544: `bshb_event__1457496544:${string}`,
-    schema_bshb_event__1457496544: {eventType: string;},
-    bshb_event__72079289: `bshb_event__72079289:${string}`,
-    schema_bshb_event__72079289: {email: string;},
+    bshb_event_199695012: `bshb_event_199695012:${string}`,
+    schema_bshb_event_199695012: {email: string;},
+    bshb_event_514328939: `bshb_event_514328939:${string}`,
+    schema_bshb_event_514328939: never,
+    bshb_event__272409232: `bshb_event__272409232:${string}`,
+    schema_bshb_event__272409232: {eventType: string;},
 }
 
 export type AnalyticsKeyScope = 'query' | 'send'
@@ -305,7 +305,7 @@ export interface BlogPostComponent {
     _title: Scalars['String']
     authors: AuthorComponent[]
     body: Body_1
-    categories: Scalars['BSHBSelect_111227338'][]
+    categories: Scalars['BSHBSelect_1837708130'][]
     description: Scalars['String']
     image: DarkLightImageComponent
     ogImage: BlockOgImage
@@ -394,7 +394,7 @@ export interface ButtonComponent {
     href: Scalars['String']
     icon: (Scalars['String'] | null)
     label: Scalars['String']
-    type: Scalars['BSHBSelect__1219632885']
+    type: Scalars['BSHBSelect_1867466044']
     __typename: 'ButtonComponent'
 }
 
@@ -726,7 +726,7 @@ export interface FaqComponent {
     _sys: BlockDocumentSys
     _title: Scalars['String']
     heading: HeadingComponent
-    layout: (Scalars['BSHBSelect__2134102963'] | null)
+    layout: (Scalars['BSHBSelect_604783081'] | null)
     questions: Questions
     __typename: 'FaqComponent'
 }
@@ -783,7 +783,7 @@ export interface FeatureHeroComponent {
     _title: Scalars['String']
     actions: (ButtonComponent[] | null)
     heading: HeadingComponent
-    heroLayout: Scalars['BSHBSelect_1879002554']
+    heroLayout: Scalars['BSHBSelect_1885808492']
     image: DarkLightImageComponent
     __typename: 'FeatureHeroComponent'
 }
@@ -1089,9 +1089,9 @@ export type FreeformTextComponentOrderByEnum = '_sys_createdAt__ASC' | '_sys_cre
 
 export interface GeneralEvents {
     /** The `adminKey` gives clients the ability to query, delete and update this block's data. **It's not meant to be exposed to the public.** */
-    adminKey: Scalars['bshb_event__1457496544']
+    adminKey: Scalars['bshb_event__272409232']
     /** The `ingestKey` gives clients the ability to send new events to this block. Generally, it's safe to expose it to the public. */
-    ingestKey: Scalars['bshb_event__1457496544']
+    ingestKey: Scalars['bshb_event__272409232']
     schema: Scalars['BSHBEventSchema']
     __typename: 'GeneralEvents'
 }
@@ -1145,7 +1145,7 @@ export interface HeadingComponent {
     _slugPath: Scalars['String']
     _sys: BlockDocumentSys
     _title: Scalars['String']
-    align: (Scalars['BSHBSelect_1868728927'] | null)
+    align: (Scalars['BSHBSelect__1086199789'] | null)
     subtitle: (Scalars['String'] | null)
     tag: (Scalars['String'] | null)
     title: Scalars['String']
@@ -1660,6 +1660,8 @@ export interface Quotes {
 
 export interface RepoSys {
     branches: _Branches
+    dashboardUrl: Scalars['String']
+    forkUrl: Scalars['String']
     hash: Scalars['String']
     id: Scalars['ID']
     playgroundInfo: (_PlaygroundInfo | null)
@@ -1680,8 +1682,8 @@ export interface RichTextCalloutComponent {
     _sys: BlockDocumentSys
     _title: Scalars['String']
     content: (Content | null)
-    size: (Scalars['BSHBSelect__1142171011'] | null)
-    type: Scalars['BSHBSelect_1795611679']
+    size: (Scalars['BSHBSelect_1960434833'] | null)
+    type: Scalars['BSHBSelect__108045351']
     __typename: 'RichTextCalloutComponent'
 }
 
@@ -1839,18 +1841,18 @@ export type SublinksItemOrderByEnum = '_sys_createdAt__ASC' | '_sys_createdAt__D
 
 export interface Submissions {
     /** The `adminKey` gives clients the ability to query, delete and update this block's data. **It's not meant to be exposed to the public.** */
-    adminKey: Scalars['bshb_event_1238049471']
+    adminKey: Scalars['bshb_event_514328939']
     /** The `ingestKey` gives clients the ability to send new events to this block. Generally, it's safe to expose it to the public. */
-    ingestKey: Scalars['bshb_event_1238049471']
+    ingestKey: Scalars['bshb_event_514328939']
     schema: Scalars['BSHBEventSchema']
     __typename: 'Submissions'
 }
 
 export interface Submissions_1 {
     /** The `adminKey` gives clients the ability to query, delete and update this block's data. **It's not meant to be exposed to the public.** */
-    adminKey: Scalars['bshb_event__72079289']
+    adminKey: Scalars['bshb_event_199695012']
     /** The `ingestKey` gives clients the ability to send new events to this block. Generally, it's safe to expose it to the public. */
-    ingestKey: Scalars['bshb_event__72079289']
+    ingestKey: Scalars['bshb_event_199695012']
     schema: Scalars['BSHBEventSchema']
     __typename: 'Submissions_1'
 }
@@ -1930,8 +1932,8 @@ export interface Theme {
     _slugPath: Scalars['String']
     _sys: BlockDocumentSys
     _title: Scalars['String']
-    accent: Scalars['BSHBSelect_1961083722']
-    grayScale: Scalars['BSHBSelect__605999048']
+    accent: Scalars['BSHBSelect_262811106']
+    grayScale: Scalars['BSHBSelect__1721217313']
     __typename: 'Theme'
 }
 
@@ -6164,6 +6166,8 @@ export interface QuotesGenqlSelection{
 
 export interface RepoSysGenqlSelection{
     branches?: (_BranchesGenqlSelection & { __args?: {limit?: (Scalars['Int'] | null), offset?: (Scalars['Int'] | null)} })
+    dashboardUrl?: boolean | number
+    forkUrl?: boolean | number
     hash?: boolean | number
     id?: boolean | number
     playgroundInfo?: _PlaygroundInfoGenqlSelection
