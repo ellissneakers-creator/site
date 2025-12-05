@@ -24,7 +24,7 @@ function transformNavigationLinks(links: HeaderLiksFragment[]): HeaderLiksFragme
       return {
         ...link,
         _title: "Resources",
-        href: undefined, // Remove href so chevron shows like Features
+        href: null, // Remove href so chevron shows like Features
         sublinks: {
           ...link.sublinks,
           items: [
