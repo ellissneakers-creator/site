@@ -105,7 +105,7 @@ export function DarkLightImageAutoscale(props: DarkLightImageProps) {
       priority
       alt="logo"
       quality={100}
-      className="w-auto h-4 max-w-[70px] object-contain"
+      className="w-auto h-[20px] max-w-[85px] object-contain"
       style={{
         aspectRatio: props.light.aspectRatio,
       }}

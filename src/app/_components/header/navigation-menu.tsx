@@ -17,6 +17,64 @@ import type { HeaderFragment, HeaderLiksFragment } from ".";
 import { useToggleState } from "@/hooks/use-toggle-state";
 import { useHasRendered } from "@/hooks/use-has-rendered";
 
+// Helper function to transform navigation links
+function transformNavigationLinks(links: HeaderLiksFragment[]): HeaderLiksFragment[] {
+  const transformed = links.map((link) => {
+    if (link._title.toLowerCase() === "blog") {
+      return {
+        ...link,
+        _title: "Resources",
+        href: undefined, // Remove href so chevron shows like Features
+        sublinks: {
+          ...link.sublinks,
+          items: [
+            {
+              _id: `${link._id}-blog`,
+              _title: "Blog",
+              link: {
+                __typename: "PageReferenceComponent" as const,
+                page: {
+                  pathname: link.href || "/blog",
+                  _title: "Blog",
+                },
+              },
+            },
+            {
+              _id: `${link._id}-page-examples`,
+              _title: "Page Examples",
+              link: {
+                __typename: "CustomTextComponent" as const,
+                text: "/page-examples",
+              },
+            },
+            {
+              _id: `${link._id}-customer-experience`,
+              _title: "Customer Experience",
+              link: {
+                __typename: "CustomTextComponent" as const,
+                text: "/customer-experience",
+              },
+            },
+          ],
+        },
+      };
+    }
+    return link;
+  });
+
+  // Add "About" navigation item
+  const aboutItem: HeaderLiksFragment = {
+    _id: "about-nav-item",
+    _title: "About",
+    href: "/about",
+    sublinks: {
+      items: [],
+    },
+  };
+
+  return [...transformed, aboutItem];
+}
+
 // #region desktop 💻
 /* -------------------------------------------------------------------------- */
 /*                                   Desktop                                  */
@@ -29,13 +87,23 @@ export function NavigationMenuHeader({
   links: HeaderLiksFragment[];
   className?: string;
 }) {
+  // Transform links: change "Blog" to "Resources" and add sublinks
+  const transformedLinks = transformNavigationLinks(links);
+
+  // Filter out pricing and changelog
+  const filteredLinks = transformedLinks.filter(
+    (link) => 
+      !link._title.toLowerCase().includes("pricing") && 
+      !link._title.toLowerCase().includes("changelog")
+  );
+
   return (
     <NavigationMenu
       className={clsx("relative z-1 flex-col justify-center lg:flex", className)}
       delayDuration={50}
     >
       <NavigationMenuList className="flex flex-1 gap-0.5 px-4">
-        {links.map((link) =>
+        {filteredLinks.map((link) =>
           link.sublinks.items.length > 0 ? (
             <NavigationMenuLinkWithMenu key={link._id} {...link} />
           ) : (
@@ -151,13 +219,24 @@ export function DesktopMenu({ navbar, rightCtas }: HeaderFragment) {
     <>
       <NavigationMenuHeader className="hidden lg:flex" links={navbar.items} />
       <div className="hidden items-center gap-2 justify-self-end lg:flex">
-        {rightCtas.items.map((cta) => {
-          return (
-            <ButtonLink key={cta._id} className="px-3.5!" href={cta.href} intent={cta.type}>
-              {cta.label}
-            </ButtonLink>
-          );
-        })}
+        {rightCtas.items
+          .filter((cta) => !cta.label?.toLowerCase().includes("log in"))
+          .map((cta) => {
+            const label = cta.label?.toLowerCase().includes("get started") 
+              ? "Book a Demo" 
+              : cta.label;
+            const isBookDemo = label?.toLowerCase().includes("book a demo");
+            return (
+              <ButtonLink 
+                key={cta._id} 
+                className={isBookDemo ? "px-3.5! font-medium" : "px-3.5!"} 
+                href={cta.href} 
+                intent={cta.type}
+              >
+                {label}
+              </ButtonLink>
+            );
+          })}
       </div>
     </>
   );
@@ -185,7 +264,13 @@ export function MobileMenu({ navbar, rightCtas }: HeaderFragment) {
           <div className="bg-surface-primary dark:bg-dark-surface-primary fixed top-[calc(var(--header-height)+1px)] left-0 z-10 h-auto w-full">
             <div className="flex flex-col gap-8 px-6 py-8">
               <nav className="flex flex-col gap-4">
-                {navbar.items.map((link) =>
+                {transformNavigationLinks(navbar.items)
+                  .filter(
+                    (link) => 
+                      !link._title.toLowerCase().includes("pricing") && 
+                      !link._title.toLowerCase().includes("changelog")
+                  )
+                  .map((link) =>
                   link.sublinks.items.length > 0 ? (
                     <ItemWithSublinks
                       key={link._id}
@@ -207,13 +292,25 @@ export function MobileMenu({ navbar, rightCtas }: HeaderFragment) {
                 )}
               </nav>
               <div className="flex items-center justify-start gap-2">
-                {rightCtas.items.map((cta) => {
-                  return (
-                    <ButtonLink key={cta._id} href={cta.href} intent={cta.type} size="lg">
-                      {cta.label}
-                    </ButtonLink>
-                  );
-                })}
+                {rightCtas.items
+                  .filter((cta) => !cta.label?.toLowerCase().includes("log in"))
+                  .map((cta) => {
+                    const label = cta.label?.toLowerCase().includes("get started") 
+                      ? "Book a Demo" 
+                      : cta.label;
+                    const isBookDemo = label?.toLowerCase().includes("book a demo");
+                    return (
+                      <ButtonLink 
+                        key={cta._id} 
+                        href={cta.href} 
+                        intent={cta.type} 
+                        size="lg"
+                        className={isBookDemo ? "font-medium" : undefined}
+                      >
+                        {label}
+                      </ButtonLink>
+                    );
+                  })}
               </div>
             </div>
           </div>
