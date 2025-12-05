@@ -79,11 +79,11 @@ export function DarkLightImageAutoscale(props: DarkLightImageProps) {
     <DarkLightImage
       priority
       alt="logo"
-      className={clsx("w-auto max-w-[200px] object-contain", {
-        "h-10": logoStyle === "square",
-        "h-9": logoStyle === "4/3",
-        "h-8": logoStyle === "portrait",
-        "h-6": logoStyle === "landscape",
+      className={clsx("w-auto max-w-[300px] object-contain", {
+        "h-16": logoStyle === "square",
+        "h-14": logoStyle === "4/3",
+        "h-12": logoStyle === "portrait",
+        "h-10": logoStyle === "landscape",
       })}
       style={{
         aspectRatio: props.light.aspectRatio,
