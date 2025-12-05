@@ -1,22 +1,14 @@
 import clsx from "clsx";
 
 import { fragmentOn } from "basehub";
-import { AvatarsGroup } from "@/common/avatars-group";
-import { Avatar } from "@/common/avatar";
-import { avatarFragment } from "@/lib/basehub/fragments";
 import { TrackedButtonLink } from "@/app/_components/tracked_button";
 import { GeneralEvents } from "@/../basehub-types";
+import { AnimatedCounterText } from "./animated-counter";
 
 export const heroFragment = fragmentOn("HeroComponent", {
   _analyticsKey: true,
   customerSatisfactionBanner: {
     text: true,
-    avatars: {
-      items: {
-        _id: true,
-        avatar: avatarFragment,
-      },
-    },
   },
   title: true,
   subtitle: true,
@@ -46,14 +38,7 @@ export function Hero(hero: Hero & { eventsKey: GeneralEvents["ingestKey"] }) {
       <div className="divide-border dark:divide-dark-border relative z-10 flex flex-col divide-y pt-[35px]">
         <div className="flex flex-col items-center justify-end">
           <div className="border-border dark:border-dark-border flex items-center gap-2 border! border-b-0! px-4 py-2">
-            <AvatarsGroup>
-              {hero.customerSatisfactionBanner.avatars.items.map(({ avatar, _id }) => (
-                <Avatar priority {...avatar} key={_id} />
-              ))}
-            </AvatarsGroup>
-            <p className="text-text-tertiary dark:text-dark-text-tertiary text-sm tracking-tight">
-              {hero.customerSatisfactionBanner.text}
-            </p>
+            <AnimatedCounterText text={hero.customerSatisfactionBanner.text} />
           </div>
         </div>
         <div>
